@@ -3,13 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Status
 import CheckBox from '@react-native-community/checkbox';
 
 export default function App() {
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
-  const [tasks, setTasks] = useState([{
-    description: "Jogar Valorant",
-    priority: "high",
-    priorityColor: "#e76256",
-    done: false,
-  }]);
+  const [tasks, setTasks] = useState([]);
   const [taskDescription, setTaskDescription] = useState('');
   const [taskPriority, setTaskPriority] = useState('');
   const [bgPriorityBtColor, setBgPriorityBtColor] = useState({
@@ -18,12 +12,12 @@ export default function App() {
     "high": "",
   });
   const [textsPriorityBtColor, setTextsPriorityBtColor] = useState({
-    "low": "#2eeca0",
+    "low": "#ede615",
     "medium": "#fdaf3d",
     "high": "#e76256",
   });
   const colors = {
-    "low": "#2eeca0",
+    "low": "#ede615",
     "medium": "#fdaf3d",
     "high": "#e76256",
   };
@@ -41,7 +35,6 @@ export default function App() {
 
     for (var color in textColors) {
       if (textColors[color] == "#fff" && buttonsBgs[color] == "#fff") {
-        console.log("Entrou na função")
         textColors[color] = colors[color];
       }
     }
@@ -56,14 +49,13 @@ export default function App() {
   };
 
   const handleOnAddTaskBtPress = () => {
-    for (var task in tasks){
-      console.log(task);
+    for (var task in tasks) {
       if (tasks[task].description.toLowerCase() == taskDescription.toLowerCase()) {
         Alert.alert(
           "Aviso",
           "Tarefa já adicionada!",
           [
-           { text: "OK"}
+            { text: "OK" }
           ],
           { cancelable: false }
         );
@@ -82,8 +74,28 @@ export default function App() {
     console.log(newTasks)
     setTaskDescription('');
     setTasks(newTasks);
-    
+
   };
+
+  const handleTaskDone = async (index) => {    
+    var newTasks = [...tasks];
+    var index = index.index;
+    console.log(index);
+    
+    newTasks[index].done = true;
+    setTasks(newTasks);
+
+    function timeout(delay) {
+      return new Promise(res => setTimeout(res, delay));
+      
+    };
+    await timeout(500);
+    
+    var newTasks = [...tasks];
+    newTasks.splice(index, 1);
+    setTasks(newTasks);
+
+  }
 
   return (
 
@@ -103,9 +115,9 @@ export default function App() {
           <View key={index} style={styles.task}>
 
             <View key={task} style={styles.containerTaskDescription}>
-              <CheckBox key={[index, task.done]} disabled={false} value={toggleCheckBox} onValueChange={(newValue) => setToggleCheckBox(newValue)} style={styles.checkbox} />
+              <CheckBox key={[index, task.done]} disabled={false} value={task.done} onChange={() => handleTaskDone({index})} style={styles.checkbox} />
 
-              <Text key={task.description} style={styles.taskDescription}>{task.description}</Text>
+              <Text key={task.description} style={[styles.taskDescription, {textDecorationLine: task.done ? 'line-through' : 'none'}]}>{task.description}</Text>
 
             </View>
             <View key={[task.description, task.priorityColor]} style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: task.priorityColor }}></View>
@@ -117,18 +129,18 @@ export default function App() {
         <View style={styles.borderButtonPriority}></View>
 
         <TouchableOpacity style={[styles.buttonPriority, { backgroundColor: bgPriorityBtColor.low }]} onPress={() => handlePriorityBtPress("low")}>
-          <Text style={{ color: textsPriorityBtColor.low }}>Low</Text>
+          <Text style={{ color: textsPriorityBtColor.low, fontWeight: "bold" }}>Low</Text>
         </TouchableOpacity>
 
         <View style={styles.borderButtonPriority}></View>
 
         <TouchableOpacity style={[styles.buttonPriority, { backgroundColor: bgPriorityBtColor.medium }]} onPress={() => handlePriorityBtPress("medium")}>
-          <Text style={{ color: textsPriorityBtColor.medium }}>Medium</Text>
+          <Text style={{ color: textsPriorityBtColor.medium, fontWeight: "bold"}}>Medium</Text>
         </TouchableOpacity>
 
         <View style={styles.borderButtonPriority}></View>
         <TouchableOpacity style={[styles.buttonPriority, { backgroundColor: bgPriorityBtColor.high }]} onPress={() => handlePriorityBtPress("high")}>
-          <Text style={{ color: textsPriorityBtColor.high }}>High</Text>
+          <Text style={{ color: textsPriorityBtColor.high, fontWeight: "bold" }}>High</Text>
         </TouchableOpacity>
 
         <View style={styles.borderButtonPriority}></View>
@@ -264,12 +276,13 @@ const styles = StyleSheet.create({
   },
   inputNewTask: {
     color: "black",
-    fontFamily: 'sans-serif-light',
+    
+    
     width: "90%",
     height: 50,
   },
   textBtNewTask: {
     color: "#5ca8e0",
-    fontFamily: 'sans-serif-light',
+    
   },
 });
