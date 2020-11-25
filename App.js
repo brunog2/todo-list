@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     width: '90%',
     height: 1,
     backgroundColor: "#c9d7e1",
-    marginBottom: 5,
+    marginBottom: 10,
   },
   headerTitlePrimary: {
     fontFamily: 'sans-serif-light',
@@ -232,14 +232,14 @@ const styles = StyleSheet.create({
   tasks: {
     flex: 1,
     width: "100%",
-    marginBottom: 15,
+    
   },
   task: {
     width: "90%",
     marginLeft: "auto",
     marginRight: "auto",
-    marginBottom: 6,
-    marginTop: 6,
+    marginBottom: 12,
+    
     backgroundColor: '#fff',
     height: 45,
     borderRadius: 5,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     borderColor: "#c9d7e1",
     alignItems: "center",
     marginBottom: 10,
-    marginTop: 15,
+    marginTop: 10,
   },
   buttonPriority: {
     display: "flex",
